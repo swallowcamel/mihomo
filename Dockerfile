@@ -1,5 +1,5 @@
 # ========== 第一阶段：构建 Metacubexd 前端 ==========
-FROM node:20-alpine AS frontend-builder
+FROM node:22-alpine AS frontend-builder
 
 ARG METACUBEXD_VERSION
 ENV PNPM_HOME="/pnpm"
@@ -10,14 +10,9 @@ ENV NODE_OPTIONS="--max_old_space_size=4096"
 WORKDIR /build
 
 # 安装系统依赖和 pnpm
-# 第 12-15 行之后添加
 RUN apk update && apk add --no-cache git curl python3 make g++ \
     && npm install -g pnpm@latest \
-    && corepack enable && corepack prepare pnpm@latest --activate \
-    # ✅ 新增：配置 pnpm 网络参数
-    && pnpm config set fetch-timeout 120000 \
-    && pnpm config set fetch-retry-mintimeout 20000 \
-    && pnpm config set fetch-retry-maxtimeout 120000
+    && corepack enable && corepack prepare pnpm@latest --activate
 
 # 克隆指定版本的 Metacubexd 源码
 RUN echo "正在克隆 MetaCubeX/metacubexd 版本: ${METACUBEXD_VERSION}" \
