@@ -13,7 +13,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: mihomo
-  DOCKERHUB_IMAGE_NAME: daitcl/mihomo
+  DOCKERHUB_IMAGE_NAME: swallowcamel/mihomo
 
 jobs:
   build-and-push:
@@ -65,7 +65,7 @@ jobs:
           build-args: |
             MI_VERSION=${{ env.MI_VERSION }}
             METACUBEXD_VERSION=${{ env.METACUBEXD_VERSION }}
-          platforms: linux/amd64
+          platforms: linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
