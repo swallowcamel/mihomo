@@ -12,12 +12,18 @@ WORKDIR /build
 # 安装系统依赖和 pnpm
 RUN apk update && apk add --no-cache git curl python3 make g++ \
     && npm install -g pnpm@latest \
-    && corepack enable && corepack prepare pnpm@latest --activate
+    && corepack enable && corepack prepare pnpm@latest --activate \
+    && pnpm config set fetch-timeout 240000 \
+    && pnpm config set fetch-retry-mintimeout 30000 \
+    && pnpm config set fetch-retry-maxtimeout 180000
 
 # 克隆指定版本的 Metacubexd 源码
 RUN echo "正在克隆 MetaCubeX/metacubexd 版本: ${METACUBEXD_VERSION}" \
     && git clone -b ${METACUBEXD_VERSION} --depth 1 https://github.com/MetaCubeX/metacubexd.git . \
     || (echo "克隆失败，尝试使用 main 分支..." && git clone --depth 1 https://github.com/MetaCubeX/metacubexd.git .)
+
+# 禁用在线字体加载（离线方案）
+RUN sed -i "s/provider: 'google'/provider: 'none'  \/\/ disabled for offline build/g" packages/ui/nuxt.config.ts || true
 
 # 安装依赖并构建静态资源
 RUN echo "安装依赖..." \
