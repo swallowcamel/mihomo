@@ -127,7 +127,7 @@ RUN apk update && apk add --no-cache libcap curl bash gettext coreutils tzdata \
 
 # 下载并安装 Mihomo 核心
 RUN mkdir -p /root/.config/mihomo \
-    && curl -fL "https://github.com/MetaCubeX/mihomo/releases/download/${MI_VERSION}/mihomo-linux-amd64-compatible-${MI_VERSION}.gz" -o /tmp/mihomo.gz \
+    && curl -fL "https://github.com/MetaCubeX/mihomo/releases/download/${MI_VERSION}/mihomo-linux-arm64-${MI_VERSION}.gz" -o /tmp/mihomo.gz \
     && gunzip /tmp/mihomo.gz && mv /tmp/mihomo /usr/local/bin/mihomo \
     && chmod +x /usr/local/bin/mihomo \
     && setcap 'cap_net_bind_service=+ep' /usr/local/bin/mihomo
